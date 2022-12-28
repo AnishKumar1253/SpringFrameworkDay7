@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:context="http://www.springframework.org/schema/context"
+ xmlns:p="http://www.springframework.org/schema/p"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-4.0.xsd  
+     http://www.springframework.org/schema/context 
+     http://www.springframework.org/schema/context/spring-context-4.0.xsd"
+ >
+ 	<!--for three beans we will be using property injection and for other three we wil
+ 	use constructor injection and to implement dependency injection we will use autowire by type
+ 	and by Name  -->
+ 	
+ 	<!-- To set the date format -->
+ 	 <bean id="dateFormat" class="java.text.SimpleDateFormat">
+        <constructor-arg value="yyyy-MM-dd" />
+    </bean>
+    <bean id="start-date" factory-bean="dateFormat" factory-method="parse">
+                <constructor-arg value="2022-10-28" />
+      </bean>
+      <bean id="end-date" factory-bean="dateFormat" factory-method="parse">
+                <constructor-arg value="2022-10-30" />
+      </bean>
+       <bean id="senderInfoDate" factory-bean="dateFormat" factory-method="parse">
+                <constructor-arg value="2022-12-10" />
+      </bean>
+      
+      
+      <!-- Rate Info -->
+ 	
+ 	<bean id="rate-info" class="com.masai.app.RateInfo">
+ 	
+ 		<property name="mMaxQtyForRate" value="100"></property>
+ 		<property name="mRateAmount" value="200.56"></property>
+ 		<property name="mRateEndDate" ref="end-date">
+ 		</property>
+ 		<property name="mRateId" value="102"></property>
+ 		<property name="mRateStartDate" ref="start-date">
+ 		</property>
+ 	</bean>
+ 	
+ 	
+ 	<!-- Contact   -->
+ 	<bean id="contact" class="com.masai.app.Contact">
+ 		<constructor-arg value="anish@gmail.com"></constructor-arg>
+ 		<constructor-arg value="anish"></constructor-arg>
+ 		<constructor-arg value="9999900000"></constructor-arg>
+ 		<constructor-arg value="kumar"></constructor-arg>
+ 		
+ 	</bean>
+ 	<bean id="mCustomerContact" class="com.masai.app.Contact">
+ 		<constructor-arg value="raj@gmail.com"></constructor-arg>
+ 		<constructor-arg value="raj"></constructor-arg>
+ 		<constructor-arg value="8989898989"></constructor-arg>
+ 		<constructor-arg value="mishra"></constructor-arg>
+ 		
+ 	</bean>
+ 	
+ 	<!-- Customer -->
+ 	<bean id="customer" class="com.masai.app.Customer" autowire="byName">
+ 		<property name="mCustomerId" value="2" />
+ 		<property name="mCustomerName" value="jayat" />
+ 	</bean>
+ 
+ 	
+ 	<!-- sender info -->
+ 	<bean id="sender-info" class="com.masai.app.SenderInfo">
+ 		<property name="mSendDate" ref="senderInfoDate" ></property>
+ 		<property name="mSenderContact" ref="contact" ></property>
+ 		<property name="mSenderDesc" value="Advisor"></property>
+ 	</bean>
+ 	
+ 	
+ 	<!-- RateUpdateDetails  -->
+ 	<bean id="rate-update-details" class="com.masai.app.RateUpdateDetails" autowire="byType">
+ 		<property name="mRateId" value="500"></property>
+ 	</bean>
+ 	<bean id="rate-update-details-1" class="com.masai.app.RateUpdateDetails" autowire="byType">
+ 		<property name="mRateId" value="600"></property>
+ 	</bean>
+ 	
+ 	<!-- RateUpdate -->
+ 	<bean id="rate-update" class="com.masai.app.RateUpdate">
+ 		<property name="mRateUpdateId" value="378"></property>
+ 		<property name="mSenderInfo" ref="sender-info"></property>
+ 		<property name="mUpdateDetails">
+ 			<list>
+ 			<bean factory-bean="rate-update-details" class="com.masai.app.RateUpdateDetails" 
+ 			autowire="byType">
+ 			<property name="mRateId" value="500"></property>
+ 			</bean>
+ 			
+ 			<bean factory-bean="rate-update-details-1" class="com.masai.app.RateUpdateDetails" 
+ 			autowire="byType">
+ 			<property name="mRateId" value="600"></property>
+ 			</bean>
+ 			
+ 			</list>
+ 		</property>
+ 	</bean>
+
+ 
+ 	
+ 
+ </beans>
